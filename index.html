@@ -72,10 +72,11 @@ td input{width:100%;min-width:70px}
 <div class="add"><input type="time" id="pt" style="flex:0 0 auto;min-width:0"><input id="pe" placeholder="New item"><button class="btn" id="pa">Add</button></div></div></section>
 </main>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<!-- Firebase SDKs (Compat - Stable on Mobile) -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
+<script>
 const firebaseConfig = {
   apiKey: "AIzaSyDuGLZC0hLJcAsawp6dIZqK8AAbiwNxTEg",
   authDomain: "wedding-planning-tracker.firebaseapp.com",
@@ -87,9 +88,8 @@ const firebaseConfig = {
   measurementId: "G-31XMSCTGFQ"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const trackerRef = ref(db, 'weddingTracker');
+firebase.initializeApp(firebaseConfig);
+const db = firebase.database().ref('weddingTracker');
 
 const RAW={
 "Start now (5 months out)":[
@@ -155,13 +155,13 @@ const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({
 
 const save=()=>{
   try {
-    set(trackerRef, S);
+    db.set(S);
   } catch(e) {
     console.error("Firebase sync error:", e);
   }
 };
 
-onValue(trackerRef, (snapshot) => {
+db.on('value', (snapshot) => {
   const data = snapshot.val();
   if (data) {
     S = data;
@@ -238,4 +238,4 @@ $('nav').onclick=e=>{
 
 document.addEventListener('change',e=>{const d=e.target.dataset;if(d.id){S.c[d.id]=e.target.checked}else if(d.g!=null){S.g[d.g].s=+e.target.value}else if(d.b!=null){S.b[d.b][d.f]=+e.target.value||0}else if(d.v!=null){S.v[d.v][d.f]=["c","p","s","t"].includes(d.f)?+e.target.value||0:e.target.value}else if(d.p!=null){S.p[d.p][d.f]=e.target.value}else return;save()});
 document.addEventListener('click',e=>{const d=e.target.dataset;
-if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=n
+if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=null)S.b.splice(+d.db,1);
