@@ -77,10 +77,11 @@ td input{width:100%;min-width:70px}
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
 
 <script>
-// --- CONFIGURED WITH YOUR FIREBASE KEYS ---
+// --- YOUR CONFIG & DATABASE URL ---
 const firebaseConfig = {
   apiKey: "AIzaSyDuGLZC0hLJcAsawp6dIZqK8AAbiwNxTEg",
   authDomain: "wedding-planning-tracker.firebaseapp.com",
+  databaseURL: "https://wedding-planning-tracker-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "wedding-planning-tracker",
   storageBucket: "wedding-planning-tracker.firebasestorage.app",
   messagingSenderId: "747843009153",
@@ -150,102 +151,4 @@ const OP={},HW={
 "Book hair and makeup":"Look at portfolios and ask about travel fees;Book a trial a few weeks before;Confirm the arrival time on the wedding day;Pay the deposit",
 "Plan the honeymoon":"Decide how long you can be away and your budget;Keep dates flexible around the baby due in June;Compare travel and stay options;Book refundable options when possible",
 "Check extra requirements that may apply":"Visit or call the registrar and ask for the complete list for your situation;Ask whether parental consent or advice is needed for your ages;Ask which seminar certificate is required;Write down the fees and processing times",
-"Apply for the marriage license":"Both of you go to the registrar together with your documents;Pay the fees;Wait for the posting period (usually 10 days) before it is released;Collect it and check every name and date, since it is valid for about 120 days",
-"Confirm all vendors":"Message each vendor the date, time and address;Ask them to confirm in writing;Share the day timeline;Pay final balances and update the Budget tab",
-"Final outfit fittings":"Go to the last fitting with shoes and accessories;Check comfort and movement;Pick up outfits a few days before;Hang them ready at home",
-"Plan the program and seating":"List the order: arrival, ceremony, photos, meal, toasts;Give each part a rough time;Seat families together, then fill in the rest;Share it with helpers and vendors",
-"Prepare the ceremony paperwork":"Put the marriage license, IDs and photocopies in one folder;Remind your witnesses of the time and to bring valid IDs;Ask the officiant what to bring and when to arrive;Assign one person to hold the folder",
-"Final headcount":"Check the Guests tab for confirmed guests;Follow up with guests who have not replied;Send the final number to the caterer and venue;Confirm dietary needs",
-"Pack and prepare":"Make a list two days before;Pack rings, license, IDs and outfits;Prepare labeled envelopes for vendor balances;Charge phones and pack a small emergency kit",
-"Assign day-of helpers":"Pick a trusted person to handle vendors and questions;Share the timeline and vendor contacts;Assign someone for guests and gifts;Ask them to filter questions so you can enjoy the day",
-"After the wedding":"Make sure the officiant and witnesses sign the marriage certificate;Confirm the registrar files it;Request your PSA marriage certificate once it is registered;Send thank-you messages",
-"Choose a pediatrician":"Ask family, friends and your doctor for recommendations;Check which hospitals and clinics they work with;Check insurance or PhilHealth coverage;Call and ask about newborn visits",
-"Plan parental leave":"Check your workplace policy or ask HR;Tell your supervisor early;Plan your duty schedule around the due date;Keep copies of any forms",
-"Set up baby essentials":"Make a short list of must-haves;Ask family for hand-me-downs;Set up a safe sleeping space;Buy the rest closer to the due date",
-"Pack the hospital bag":"Ask your doctor or hospital what they recommend;Pack documents, clothes and toiletries;Keep the bag by the door;Tell your support person where it is"};
-const CN=Object.keys(CL),RS=["Pending","Confirmed","Declined"];
-let S = {
-  n: 'Our Wedding',
-  d: '2027-04-01',
-  s: Date.now(),
-  c: {},
-  x: [],
-  g: [],
-  v: [],
-  p: [["09:00","Venue setup and vendor arrival"],["10:30","Hair, makeup and getting dressed"],["12:30","Guests arrive and are seated"],["13:00","Ceremony begins with the officiant"],["13:30","Signing of the marriage certificate with witnesses"],["13:45","Group photos"],["14:30","Reception begins and the meal is served"],["15:30","Toasts and cake cutting"],["16:30","Music, games and open floor"],["18:00","Send-off and cleanup"]].map(([tm,e])=>({tm,e,w:''})),
-  b: [["Venue",30000],["Catering",50000],["Photo and video",15000],["Attire",15000],["Flowers and decor",10000],["Music",6000],["Rings",10000],["Stationery",4000],["Contingency",10000]].map(([n,e])=>({n,e,p:0}))
-};
-
-const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-
-// Save to Firebase (Cloud)
-const save=()=>{
-  try {
-    db.set(S);
-  } catch(e) {
-    console.error("Firebase sync error:", e);
-  }
-};
-
-// Listen for Realtime Cloud Updates
-db.on('value', (snapshot) => {
-  const data = snapshot.val();
-  if (data) {
-    S = data;
-    S.c = S.c || {};
-    S.x = S.x || [];
-    S.g = S.g || [];
-    S.v = S.v || [];
-    S.p = S.p || [];
-    S.b = S.b || [];
-    $('nm').value = S.n || '';
-    $('dt').value = S.d || '';
-    render();
-  } else {
-    save(); // Push initial dataset if empty
-  }
-});
-
-const pct=(a,b)=>b?Math.round(a/b*100):0,bar=(id,v)=>$(id).style.width=v+'%';
-function tasks(){const t=[];CN.forEach(c=>CL[c].forEach(g=>g.L.forEach(l=>t.push({id:l.id,c,t:l.t}))));S.x.forEach((x,k)=>t.push({id:'x'+k,c:x.c,t:x.t,k}));return t}
-function tick(){const el=S.d?new Date(S.d+'T00:00:00')-Date.now():NaN;
-if(isNaN(el)){$('msg').textContent='Set your date to begin';['cd','ch','cm','cs'].forEach(i=>$(i).textContent='–');return}
-const m=el<=0;$('msg').textContent=m?'Happily ever after':'Until we say “I do”';
-const v=Math.max(el,0),p=n=>String(n).padStart(2,'0');
-$('cd').textContent=Math.floor(v/864e5);$('ch').textContent=p(Math.floor(v/36e5)%24);$('cm').textContent=p(Math.floor(v/6e4)%60);$('cs').textContent=p(Math.floor(v/1e3)%60);
-const tot=new Date(S.d+'T00:00:00')-S.s,tp=tot>0?Math.min(100,Math.round((Date.now()-S.s)/tot*100)):100;$('tp').textContent=tp+'%';bar('tb',tp)}
-function render(){const T=tasks(),done=T.filter(t=>S.c[t.id]).length;
-$('op').textContent=pct(done,T.length)+'%';bar('ob',pct(done,T.length));
-$('cats').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;return `<div class="row"><span>${c}</span><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`}).join('');
-const item=(id,t,k)=>`<label class="it"><input type="checkbox" data-id="${id}" ${S.c[id]?'checked':''}><span class="${S.c[id]?'done':''}" style="flex:1">${esc(t)}</span>${k!=null?`<button class="x" data-dx="${k}" aria-label="Remove">×</button>`:''}</label>`;
-$('nx').innerHTML=T.filter(t=>!S.c[t.id]).slice(0,5).map(t=>`<div class="row"><span>${esc(t.t)}</span><span class="muted">${t.c}</span></div>`).join('')||'<p class="muted">Everything is checked off. Congratulations!</p>';
-$('cl').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;
-return `<div class="row" style="margin-top:18px"><h3 style="margin:0">${c}</h3><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`+CL[c].map(g=>{const n=g.L.filter(l=>S.c[l.id]).length;
-return `<div class="grp">${g.h?`<div class="row" style="margin:0 0 2px"><b>${esc(g.t)}</b><span class="muted">${n}/${g.L.length}</span></div>`:''}${g.n?`<p class="muted" style="margin:0 0 4px;font-size:13px">${esc(g.n)}</p>`:''}${HW[g.t]?`<button class="hw" data-hw="${esc(g.t)}">${OP[g.t]?'Hide steps':'How to'}</button>${OP[g.t]?`<ol class="steps">${HW[g.t].split(';').map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}`:''}${g.L.map(l=>item(l.id,l.t)).join('')}</div>`}).join('')+S.x.map((x,k)=>x.c==c?item('x'+k,x.t,k):'').join('')}).join('');
-$('xc').innerHTML=CN.map(c=>`<option>${c}</option>`).join('');
-const E=S.b.reduce((a,b)=>a+(+b.e||0),0),P=S.b.reduce((a,b)=>a+(+b.p||0),0);
-$('bp').textContent=pct(P,E)+'%';bar('bb',Math.min(100,pct(P,E)));$('bt').textContent=`Paid ₱${P.toLocaleString()} of ₱${E.toLocaleString()} · Remaining ₱${(E-P).toLocaleString()}`;
-$('bl').innerHTML=S.b.map((b,i)=>`<tr><td>${esc(b.n)}</td><td><input type="number" min="0" value="${b.e}" data-b="${i}" data-f="e" aria-label="Estimated"></td><td><input type="number" min="0" value="${b.p}" data-b="${i}" data-f="p" aria-label="Paid"></td><td><button class="x" data-db="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-const C=S.g.filter(g=>g.s==1).length;$('gp').textContent=pct(C,S.g.length)+'%';bar('gb',pct(C,S.g.length));
-$('gt').textContent=`Target about 50 (40–60) · ${S.g.length} invited · ${S.g.filter(g=>g.m).length} contacted · ${C} confirmed · ${S.g.filter(g=>g.s==2).length} declined`;
-$('gl').innerHTML=S.g.map((g,i)=>`<tr><td>${esc(g.n)}</td><td><button class="x mc ${g.m?'on':''}" data-gm="${i}" aria-label="${g.m?'Contacted':'Not contacted yet'}" title="${g.m?'Contacted':'Not contacted yet'}">✉</button></td><td><select data-g="${i}">${RS.map((r,k)=>`<option value="${k}" ${g.s==k?'selected':''}>${r}</option>`).join('')}</select></td><td><button class="x" data-dg="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-const VT=["Ceremony","Reception","Both"],VS=["Considering","Visited","Booked","Passed"],op=(a,x)=>a.map((o,k)=>`<option value="${k}" ${x==k?'selected':''}>${o}</option>`).join('');
-$('vs').textContent=`${S.v.length} venues · ${S.v.filter(v=>v.s==2).length} booked`;
-$('vl').innerHTML=S.v.map((v,i)=>`<div class="grp"><div class="row" style="margin:0 0 6px"><b>${esc(v.n)}</b><button class="x" data-dv="${i}" aria-label="Remove">×</button></div><div class="vg"><select data-v="${i}" data-f="t" aria-label="Type">${op(VT,v.t)}</select><select data-v="${i}" data-f="s" aria-label="Status">${op(VS,v.s)}</select><input data-v="${i}" data-f="l" placeholder="Location" value="${esc(v.l||'')}"><input type="number" min="0" data-v="${i}" data-f="c" placeholder="Capacity" value="${v.c||''}"><input type="number" min="0" data-v="${i}" data-f="p" placeholder="Cost (₱)" value="${v.p||''}"><input data-v="${i}" data-f="m" placeholder="Contact and notes" value="${esc(v.m||'')}"></div></div>`).join('');
-S.p.sort((a,b)=>a.tm.localeCompare(b.tm));
-$('pl').innerHTML=S.p.map((x,i)=>`<tr><td><input type="time" data-p="${i}" data-f="tm" value="${x.tm}" aria-label="Time"></td><td><input data-p="${i}" data-f="e" value="${esc(x.e)}" aria-label="Event"></td><td><input data-p="${i}" data-f="w" value="${esc(x.w||'')}" placeholder="Name" aria-label="Who"></td><td><button class="x" data-dp="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-tick()}
-
-$('nm').oninput=e=>{S.n=e.target.value;save()};
-$('dt').onchange=e=>{S.d=e.target.value;save()};
-$('nav').onclick=e=>{const t=e.target.dataset.t;if(!t)return;document.querySelectorAll('nav button,section').forEach(x=>x.classList.remove('on'));e.target.classList.add('on');$(t).classList.add('on')};
-document.addEventListener('change',e=>{const d=e.target.dataset;if(d.id){S.c[d.id]=e.target.checked}else if(d.g!=null){S.g[d.g].s=+e.target.value}else if(d.b!=null){S.b[d.b][d.f]=+e.target.value||0}else if(d.v!=null){S.v[d.v][d.f]=["c","p","s","t"].includes(d.f)?+e.target.value||0:e.target.value}else if(d.p!=null){S.p[d.p][d.f]=e.target.value}else return;save()});
-document.addEventListener('click',e=>{const d=e.target.dataset;
-if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=null)S.b.splice(+d.db,1);else if(d.dv!=null)S.v.splice(+d.dv,1);else if(d.dp!=null)S.p.splice(+d.dp,1);else if(d.hw!=null)OP[d.hw]=!OP[d.hw];else if(d.dg!=null)S.g.splice(+d.dg,1);else if(d.gm!=null)S.g[d.gm].m=!S.g[d.gm].m;else return;save()});
-$('xa').onclick=()=>{const t=$('xt').value.trim();if(t){S.x.push({c:$('xc').value,t});$('xt').value='';save()}};
-$('ba').onclick=()=>{const n=$('bn').value.trim();if(n){S.b.push({n,e:0,p:0});$('bn').value='';save()}};
-$('ga').onclick=()=>{const n=$('gn').value.trim();if(n){S.g.push({n,s:0});$('gn').value='';save()}};
-$('va').onclick=()=>{const n=$('vn').value.trim();if(n){S.v.push({n,t:2,s:0,l:'',c:0,p:0,m:''});$('vn').value='';save()}};
-$('pa').onclick=()=>{const e=$('pe').value.trim();if(e){S.p.push({tm:$('pt').value||'12:00',e,w:''});$('pe').value='';save()}};
-setInterval(tick,1000);
-</script></body></html>
+"Apply for the marriage license":"Both of you go to the registrar together with your documents;Pay the fees;Wait for the posting period (usually 10 days) before it 
