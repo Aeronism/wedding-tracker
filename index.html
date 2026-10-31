@@ -5,7 +5,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Jost:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--ivory:#F2EBDD;--sage:#78947F;--em:#185844;--forest:#102F27;--gold:#B08A4F;
---bg:#F2EBDD;--card:#FBF7EE;--text:#102F27;--muted:#5d6f63;--line:#d9ceb8;--track:#e3dac6;--hd:#185844;--hdt:#F2EBDD;
+--bg:#F2EBDD;--card:#102F27;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#102F27;--hdt:#F2EBDD;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#102F27;--card:#163a30;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#0c241d}}
 :root[data-theme="dark"]{--bg:#102F27;--card:#163a30;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#0c241d}
@@ -17,13 +17,13 @@ header input{background:transparent;border:0;border-bottom:1px solid var(--gold)
 header small{display:block;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);font-size:11px;margin-bottom:6px}
 nav{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;padding:12px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
 nav button{border:1px solid var(--line);background:var(--card);color:var(--text);padding:8px 16px;border-radius:99px;font:500 14px Jost,sans-serif;cursor:pointer}
-nav button.on{background:var(--em);color:#F2EBDD;border-color:var(--em)}
+nav button.on{background:#185844;color:#F2EBDD;border-color:var(--gold)}
 main{max-width:860px;margin:0 auto;padding:4px 14px 40px}
 section{display:none}section.on{display:block}
 .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
 h2{margin:0 0 10px;font-size:24px}h3{margin:0 0 8px;font-size:20px;color:var(--gold)}
 .cd{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;text-align:center;margin:10px 0}
-.cd div{background:var(--em);color:#F2EBDD;border-radius:12px;padding:12px 4px}
+.cd div{background:#185844;color:#F2EBDD;border-radius:12px;padding:12px 4px}
 .cd b{display:block;font:600 32px 'Cormorant Garamond',Georgia,serif;color:#fff}
 .cd span{font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:#dcd2b8}
 .bar{height:10px;background:var(--track);border-radius:9px;overflow:hidden}
@@ -45,14 +45,14 @@ td,th{padding:6px 4px;text-align:left;border-bottom:1px solid var(--line)}th{fon
 td input{width:100%;min-width:70px}
 .dt{display:flex;gap:10px;align-items:center;justify-content:center;margin-top:10px;font-size:14px}
 .dt input{background:#F2EBDD;color:#102F27;-webkit-text-fill-color:#102F27;border:1px solid #B08A4F;border-radius:8px;font:500 16px Jost,sans-serif;width:auto;text-align:left;padding:8px 12px;color-scheme:light}.dt label{color:#F2EBDD;font-weight:500}
-.mc{font-size:20px;opacity:.3}.mc.on{opacity:1;color:var(--gold)}.grp{padding:8px 0;border-bottom:1px solid var(--line)}.grp label.it{border:0;padding:4px 0 4px 6px}h3{color:var(--em)}.hw{background:none;border:1px solid var(--em);color:var(--em);border-radius:99px;padding:3px 12px;font:500 12px Jost,sans-serif;cursor:pointer;margin:2px 0 4px}.steps{margin:4px 0 6px;padding-left:24px;font-size:13px}.steps li{margin:3px 0}@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) h3,:root:not([data-theme="light"]) .hw{color:#d9b97a;border-color:#d9b97a}}:root[data-theme="dark"] h3,:root[data-theme="dark"] .hw{color:#d9b97a;border-color:#d9b97a}.vg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.vg input,.vg select{width:100%;min-width:0}.vg input:last-child{grid-column:1/-1}</style>
+.mc{font-size:20px;opacity:.3}.mc.on{opacity:1;color:var(--gold)}.grp{padding:8px 0;border-bottom:1px solid var(--line)}.grp label.it{border:0;padding:4px 0 4px 6px}h3{color:var(--gold)}.hw{background:none;border:1px solid var(--gold);color:var(--gold);border-radius:99px;padding:3px 12px;font:500 12px Jost,sans-serif;cursor:pointer;margin:2px 0 4px}.steps{margin:4px 0 6px;padding-left:24px;font-size:13px}.steps li{margin:3px 0}.vg{display:grid;grid-template-columns:1fr 1fr;gap:6px}.vg input,.vg select{width:100%;min-width:0}.vg input:last-child{grid-column:1/-1}</style>
 </head><body>
-<header><small>The wedding of</small><input id="nm" aria-label="Wedding title" placeholder="Our Wedding">
-<div class="dt"><label for="dt">Wedding date</label><input type="date" id="dt"></div></header>
+<header><small>The wedding of</small><input id="nm" aria-label="Wedding title" value="John & Jocelyn">
+<div class="dt"><label for="dt">Wedding date</label><input type="date" id="dt" value="2027-04-01"></div></header>
 <nav id="nav"><button data-t="d" class="on">Dashboard</button><button data-t="c">Checklist</button><button data-t="b">Budget</button><button data-t="g">Guests</button><button data-t="v">Venue</button><button data-t="p">Program</button></nav>
 <main>
 <section id="d" class="on">
-<div class="card" style="text-align:center"><h2 id="msg">Set your date to begin</h2>
+<div class="card" style="text-align:center"><h2 id="msg">Until we say “I do”</h2>
 <div class="cd"><div><b id="cd">–</b><span>Days</span></div><div><b id="ch">–</b><span>Hours</span></div><div><b id="cm">–</b><span>Mins</span></div><div><b id="cs">–</b><span>Secs</span></div></div>
 <div class="row"><span>Time elapsed since you started planning</span><b id="tp">0%</b></div><div class="bar"><i id="tb"></i></div></div>
 <div class="card"><h2>Next up</h2><div id="nx"></div></div>
@@ -93,60 +93,149 @@ const trackerRef = ref(db, 'weddingTracker');
 
 const RAW={
 "Start now (5 months out)":[
-"Set the budget|Your total is ₱150,000. Agree on priorities first, then fine-tune the split in the Budget tab.|Pick your top three priorities (for example food, photos, venue);Confirm who is contributing what;Keep 5–10% as a contingency;Open a shared wedding fund",
-"Lock the date|The venue, officiant and license timing all depend on this.|Shortlist two or three April dates;Check with key family and your witnesses;Confirm the officiant is free;Enter the final date at the top of this tracker",
-"Choose the ceremony venue and officiant|Civil weddings can be held at a city or municipal hall or at a private venue, depending on the officiant.|Ask the local civil registrar about officiants and fees;Decide between a government hall and a private venue;Book the ceremony slot;Get the booking confirmation in writing",
-"Draft the guest list|Your target is about 50 (40–60). Making an A list and a B list makes cuts easier.|Each of you writes a list separately;Merge and mark the must-invite guests;Collect contact details;Enter guests in the Guests tab",
-"Book the reception venue|Check capacity for up to 60 guests and whether outside caterers are allowed.|Shortlist three venues in Bataan;Visit and ask about packages and hidden fees;Compare total costs against the budget;Sign the contract and pay the deposit",
-"Choose two witnesses and sponsors|A civil ceremony needs at least two adult witnesses. Extra sponsors are optional.|Ask your two witnesses;Decide on any additional sponsors;Confirm their availability and valid IDs"],
+"Set the budget|Your total is ₱400,000. Agree on priorities first, then fine-tune the split in the Budget tab.|Pick your top three priorities;Confirm who is contributing what;Keep 5–10% as a contingency;Open a shared wedding fund",
+"Lock the date|The venue, officiant and license timing all depend on this.|Shortlist April dates;Check with key family and witnesses;Confirm officiant availability;Enter the final date at the top",
+"Choose ceremony venue and officiant|Civil or private venue selection.|Ask local civil registrar about fees;Book ceremony slot;Get confirmation in writing",
+"Draft the guest list|Target about 50 guests.|Each writes a list;Merge and mark must-invites;Collect contact details;Enter guests in Guests tab",
+"Book the reception venue|Check capacity for guests.|Shortlist venues in Bataan;Compare total costs;Sign contract and pay deposit",
+"Choose witnesses and sponsors|At least two adult witnesses needed.|Ask witnesses;Confirm availability and valid IDs"],
 "4 months out":[
-"Book the caterer|Food is usually the biggest slice of the budget.|Ask for menus and per-head pricing;Schedule a tasting;Confirm the guest range of 40–60;Sign the contract and pay the deposit",
-"Book the photographer and videographer|Keep the palette in mind: ivory, sage, emerald, forest and antique gold.|Review portfolios;Compare packages and coverage hours;Confirm the date and pay the deposit",
-"Attire for both of you|Allow time for fittings and alterations.|Choose outfits;Book fittings;Pick shoes and accessories;Plan alterations",
-"Book flowers, decor and music|Use your color palette so everything feels cohesive.|Book the florist and share the palette;Plan table decor and a ceremony backdrop;Book a DJ, band or prepare a playlist",
-"Choose the wedding party|Keep it small to match your guest count.|Ask close friends and family;Share dates and attire plans"],
+"Book the caterer|Food is a major budget item.|Ask for menus and pricing;Schedule tasting;Confirm guest range;Sign contract",
+"Book photo and video|Capture your memories.|Review portfolios;Compare packages;Confirm date and pay deposit",
+"Attire for both|Allow time for fittings.|Choose outfits;Book fittings;Pick accessories",
+"Flowers, decor and music|Cohesive styling.|Book florist;Plan table decor;Book music or playlist",
+"Choose wedding party|Keep it small.|Ask close friends and family;Share attire plans"],
 "3 months out":[
-"Gather marriage license documents|This is the usual list, but each city or municipality sets its own. Confirm with the civil registrar where either of you lives.|Get the marriage license application form from the registrar;Request PSA birth certificates (original plus photocopies);Request a CENOMAR (certificate of no marriage record);Get your cedula (community tax certificate);Prepare valid IDs;Take two 2x2 photos each with a white background;Ask if a barangay certificate is required",
-"Attend the pre-marriage seminar|This is usually required before the license is released.|Book a seminar slot;Attend together;Keep the certificate with your documents",
-"Send invitations|Send early so out-of-town guests can plan.|Finalize the wording;Design or print the invitations;Send them out;Track RSVPs in the Guests tab",
-"Order the cake and desserts|Ivory with greenery would match your palette.|Book a tasting;Choose size and design;Place the order and confirm delivery",
-"Book hair and makeup|Do a trial before the day.|Choose an artist;Schedule a trial;Confirm the wedding-day time",
-"Plan the honeymoon|Think about timing with the baby due in June.|Choose a destination and dates;Set a budget;Book transport and stay",
-"Check extra requirements that may apply|Some situations need more papers. Ask the registrar early so there are no surprises.|If either of you is 25 or younger, ask about parental consent or advice;If either of you was previously married, ask about the death certificate or annulment papers;Ask about fees and processing time;Ask which seminar certificate they require"],
-"Final 2 months":[
-"Apply for the marriage license|It is typically posted for about 10 days and valid for 120 days, so time it close to your date. Confirm with your civil registrar.|Both of you go in person and submit all documents;Pay the fees;Confirm the posting period ends before the wedding;Collect the license",
-"Confirm all vendors|Reconfirm everything in writing.|Reconfirm date and time with each vendor;Share the day-of timeline;Settle remaining balances",
-"Final outfit fittings|Last chance for alterations.|Attend final fittings;Pick up outfits;Prepare accessories and rings",
-"Plan the program and seating|A short, clear program keeps the day relaxed.|Decide the order of events;Make the seating chart;Write vows or a short message (optional)",
-"Prepare the ceremony paperwork|Missing a document is the most common last-minute problem.|Put the license and IDs in one folder;Give witnesses the date, time and ID reminders;Make copies"],
-"Wedding week":[
-"Final headcount|Caterer and venue need a firm number.|Send the final headcount;Confirm the seating;Confirm dietary needs",
-"Pack and prepare|Do this two days before so nothing is rushed.|Rings, license and IDs;Outfits and accessories;Envelopes for vendor payments;Emergency kit",
-"Assign day-of helpers|Free yourselves up to enjoy the day.|Pick a point person for vendors;Share the timeline and contact list;Assign someone for guests and gifts",
-"After the wedding|Make it official on record.|Make sure the marriage certificate is signed and filed;Order your PSA marriage certificate;Send thank-you messages"],
-"Baby prep (due June)":[
-"Choose a pediatrician|Do this early so you are not deciding in a hurry.|Ask for recommendations;Check hospital and insurance or PhilHealth coverage;Make a short list",
-"Plan parental leave|Talk to your workplace early.|Learn your leave and benefit options;Tell your supervisor;Plan your duty schedule around the due date",
-"Set up baby essentials|Start simple and add as you go.|Make an essentials list;Prepare a sleeping space;Ask family for hand-me-downs",
-"Pack the hospital bag|Have it ready well before the due date.|Documents and IDs;Clothes for baby and mother;Toiletries and snacks"]};
+"Gather marriage license documents|Required civil paperwork.|Get application form;Request PSA birth certificates;Request CENOMAR;Get cedula;Prepare valid IDs",
+"Attend pre-marriage seminar|Required before license release.|Book seminar slot;Attend together;Keep certificate",
+"Send invitations|Out-of-town guest planning.|Finalize wording;Send digital/printed invites;Track RSVPs",
+"Order cake and desserts|Match your theme.|Book tasting;Choose size and design;Confirm delivery",
+"Book hair and makeup|Do a trial run.|Choose artist;Schedule trial;Confirm wedding-day time",
+"Plan honeymoon|Relax after the wedding.|Choose destination;Set budget;Book transport and stay"]
+};
+
 const CL={};Object.keys(RAW).forEach((c,i)=>CL[c]=RAW[c].map((s,j)=>{const[t,n,u]=s.split('|'),b=u?u.split(';'):[];return{t,n,h:b.length>0,L:(b.length?b:[t]).map((x,k)=>({id:'c'+i+'_'+j+'_'+k,t:x}))}}));
-const OP={},HW={
-"Set the budget":"Write down the total (₱150,000) and what each of you can contribute;Rank what matters most and give those items the biggest share;Enter an estimate for each item in the Budget tab;Update the Paid column as you pay deposits so the dashboard stays accurate",
-"Lock the date":"Ask your officiant and venue which April dates are open;Check that your witnesses and close family can come;Pick one date and one backup;Set it at the top of this page so the countdown updates",
-"Choose the ceremony venue and officiant":"Visit or call the civil registrar or city hall and ask who can solemnize in your area;Ask about fees, time slots and whether a private venue is allowed;Book the slot once the date is set;Ask what the officiant needs from you before the day",
-"Draft the guest list":"Each of you writes names in a notes app;Mark the must-haves, then fill up to about 50;Keep a short B list for replacements;Add everyone to the Guests tab and tap the envelope once you have contacted them",
-"Book the reception venue":"Share your date, 40–60 guests and budget when asking for quotes;Ask what is included (tables, chairs, sound, overtime, outside caterers);Visit your top two at the same time of day as the event;Read the contract before paying the deposit and keep the receipt",
-"Choose two witnesses and sponsors":"Choose two adults you trust who can attend;Ask them in person or by call and explain their role;Share the date and remind them to bring valid IDs;Collect their full names for the marriage certificate",
-"Book the caterer":"Ask for a menu and price per head for 40–60 guests;Book a tasting before you commit;Ask about service staff, setup and cleanup;Get a written contract with the headcount deadline",
-"Book the photographer and videographer":"Look at full galleries, not only highlights;Ask what is included (hours, edited photos, delivery time);Check they can cover your venue and timeline;Sign and pay the deposit",
-"Attire for both of you":"Decide on a look that fits your palette;Visit tailors or shops and book fittings early;Choose styles with room to adjust;Keep receipts and pickup dates in one place",
-"Book flowers, decor and music":"Send the florist your palette and a few inspiration photos;Ask for a quote that includes delivery and setup;Keep the ceremony backdrop and centerpieces simple;Confirm sound equipment with the venue",
-"Choose the wedding party":"List the few people you want standing with you;Ask them personally;Tell them the date, dress code and any costs;Add their roles to your day-of timeline",
-"Gather marriage license documents":"Get the application form from the civil registrar of the city or municipality where either of you lives;Request PSA copies online or at a PSA outlet and allow processing time;Get your cedula from the city or municipal hall;Make photocopies and keep everything in one folder",
-"Attend the pre-marriage seminar":"Ask the registrar or the city social welfare office when seminars are held;Register and pay any fee;Attend together;Keep the certificate to submit with your application",
-"Send invitations":"Finalize names, date, time and venue with directions;Send digital invites first, then print for those who need them;Ask for an RSVP by a set date;Mark guests as contacted and update RSVPs in the Guests tab",
-"Order the cake and desserts":"Share your palette and guest count;Do a tasting if offered;Confirm the delivery time and who receives it;Pay the deposit and keep the order sheet",
-"Book hair and makeup":"Look at portfolios and ask about travel fees;Book a trial a few weeks before;Confirm the arrival time on the wedding day;Pay the deposit",
-"Plan the honeymoon":"Decide how long you can be away and your budget;Keep dates flexible around the baby due in June;Compare travel and stay options;Book refundable options when possible",
-"Check extra requirements that may apply":"Visit or call the registrar and ask for the complete list for your situation;Ask whether parental consent or advice is needed for your ages;Ask which seminar certificate is required;Write down the fees and processing times",
-"Apply for the marriage license":"Both of you go to the registrar together with your documents;Pay the fees;Wait for the posting period (usually 10 days) before it is released;Collect it 
+const OP={},HW={};
+const CN=Object.keys(CL),RS=["Pending","Confirmed","Declined"];
+let S = {
+  n: 'John & Jocelyn',
+  d: '2027-04-01',
+  s: Date.now(),
+  c: {},
+  x: [],
+  g: [{n:'Sample',m:true,s:0}],
+  v: [
+    {n:'Jardin Liyang, Bataan',t:2,s:0,l:'',c:'',p:'',m:''},
+    {n:'Sinagtala',t:2,s:0,l:'',c:'',p:'',m:'Miss Faye via 0917 178 2345'}
+  ],
+  p: [
+    ["09:00","Venue setup and vendor arrival","Name"],
+    ["10:30","Hair, makeup and getting dressed","Name"],
+    ["12:30","Guests arrive and are seated","Name"],
+    ["13:00","Ceremony begins with the officiant","Name"],
+    ["13:30","Signing of the marriage certificate with witnesses","Name"],
+    ["13:45","Group photos","Name"],
+    ["14:30","Reception begins and the meal is served","Name"],
+    ["15:30","Toasts and cake cutting","Name"],
+    ["16:30","Music, games and open floor","Name"]
+  ].map(([tm,e,w])=>({tm,e,w})),
+  b: [
+    ["Venue",300000],
+    ["Catering",50000],
+    ["Photo and video",15000],
+    ["Attire",15000],
+    ["Flowers and decor",10000],
+    ["Music",6000],
+    ["Rings",10000],
+    ["Stationery",4000]
+  ].map(([n,e])=>({n,e,p:0}))
+};
+
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+const save=()=>{
+  try {
+    set(trackerRef, S);
+  } catch(e) {
+    console.error("Firebase sync error:", e);
+  }
+};
+
+onValue(trackerRef, (snapshot) => {
+  const data = snapshot.val();
+  if (data) {
+    S = data;
+    S.c = S.c || {};
+    S.x = S.x || [];
+    S.g = S.g || [];
+    S.v = S.v || [];
+    S.p = S.p || [];
+    S.b = S.b || [];
+    $('nm').value = S.n || 'John & Jocelyn';
+    $('dt').value = S.d || '2027-04-01';
+  } else {
+    save();
+  }
+  render();
+});
+
+const pct=(a,b)=>b?Math.round(a/b*100):0,bar=(id,v)=>$(id).style.width=v+'%';
+function tasks(){const t=[];CN.forEach(c=>CL[c].forEach(g=>g.L.forEach(l=>t.push({id:l.id,c,t:l.t}))));S.x.forEach((x,k)=>t.push({id:'x'+k,c:x.c,t:x.t,k}));return t}
+function tick(){
+  let targetDate = S.d;
+  if(targetDate && targetDate.includes('/')) {
+    const parts = targetDate.split('/');
+    if(parts.length === 3) targetDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+  }
+  const el=targetDate?new Date(targetDate+'T00:00:00')-Date.now():NaN;
+  if(isNaN(el)){$('msg').textContent='Set your date to begin';['cd','ch','cm','cs'].forEach(i=>$(i).textContent='–');return}
+  const m=el<=0;$('msg').textContent=m?'Happily ever after':'Until we say “I do”';
+  const v=Math.max(el,0),p=n=>String(n).padStart(2,'0');
+  $('cd').textContent=Math.floor(v/864e5);$('ch').textContent=p(Math.floor(v/36e5)%24);$('cm').textContent=p(Math.floor(v/6e4)%60);$('cs').textContent=p(Math.floor(v/1e3)%60);
+  const tot=new Date(targetDate+'T00:00:00')-S.s,tp=tot>0?Math.min(100,Math.round((Date.now()-S.s)/tot*100)):100;$('tp').textContent=tp+'%';bar('tb',tp)
+}
+function render(){const T=tasks(),done=T.filter(t=>S.c[t.id]).length;
+$('op').textContent=pct(done,T.length)+'%';bar('ob',pct(done,T.length));
+$('cats').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;return `<div class="row"><span>${c}</span><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`}).join('');
+const item=(id,t,k)=>`<label class="it"><input type="checkbox" data-id="${id}" ${S.c[id]?'checked':''}><span class="${S.c[id]?'done':''}" style="flex:1">${esc(t)}</span>${k!=null?`<button class="x" data-dx="${k}" aria-label="Remove">×</button>`:''}</label>`;
+$('nx').innerHTML=T.filter(t=>!S.c[t.id]).slice(0,5).map(t=>`<div class="row"><span>${esc(t.t)}</span><span class="muted">${t.c}</span></div>`).join('')||'<p class="muted">Everything is checked off. Congratulations!</p>';
+$('cl').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;
+return `<div class="row" style="margin-top:18px"><h3 style="margin:0">${c}</h3><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`+CL[c].map(g=>{const n=g.L.filter(l=>S.c[l.id]).length;
+return `<div class="grp">${g.h?`<div class="row" style="margin:0 0 2px"><b>${esc(g.t)}</b><span class="muted">${n}/${g.L.length}</span></div>`:''}${g.n?`<p class="muted" style="margin:0 0 4px;font-size:13px">${esc(g.n)}</p>`:''}${HW[g.t]?`<button class="hw" data-hw="${esc(g.t)}">${OP[g.t]?'Hide steps':'How to'}</button>${OP[g.t]?`<ol class="steps">${HW[g.t].split(';').map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}`:''}${g.L.map(l=>item(l.id,l.t)).join('')}</div>`}).join('')+S.x.map((x,k)=>x.c==c?item('x'+k,x.t,k):'').join('')}).join('');
+$('xc').innerHTML=CN.map(c=>`<option>${c}</option>`).join('');
+const E=S.b.reduce((a,b)=>a+(+b.e||0),0),P=S.b.reduce((a,b)=>a+(+b.p||0),0);
+$('bp').textContent=pct(P,E)+'%';bar('bb',Math.min(100,pct(P,E)));$('bt').textContent=`Paid ₱${P.toLocaleString()} of ₱${E.toLocaleString()} · Remaining ₱${(E-P).toLocaleString()}`;
+$('bl').innerHTML=S.b.map((b,i)=>`<tr><td>${esc(b.n)}</td><td><input type="number" min="0" value="${b.e}" data-b="${i}" data-f="e" aria-label="Estimated"></td><td><input type="number" min="0" value="${b.p}" data-b="${i}" data-f="p" aria-label="Paid"></td><td><button class="x" data-db="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+const C=S.g.filter(g=>g.s==1).length;$('gp').textContent=pct(C,S.g.length)+'%';bar('gb',pct(C,S.g.length));
+$('gt').textContent=`Target about 50 · ${S.g.length} invited · ${S.g.filter(g=>g.m).length} contacted · ${C} confirmed · ${S.g.filter(g=>g.s==2).length} declined`;
+$('gl').innerHTML=S.g.map((g,i)=>`<tr><td>${esc(g.n)}</td><td><button class="x mc ${g.m?'on':''}" data-gm="${i}" aria-label="${g.m?'Contacted':'Not contacted yet'}" title="${g.m?'Contacted':'Not contacted yet'}">✉</button></td><td><select data-g="${i}">${RS.map((r,k)=>`<option value="${k}" ${g.s==k?'selected':''}>${r}</option>`).join('')}</select></td><td><button class="x" data-dg="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+const VT=["Ceremony","Reception","Both"],VS=["Considering","Visited","Booked","Passed"],op=(a,x)=>a.map((o,k)=>`<option value="${k}" ${x==k?'selected':''}>${o}</option>`).join('');
+$('vs').textContent=`${S.v.length} venues · ${S.v.filter(v=>v.s==2).length} booked`;
+$('vl').innerHTML=S.v.map((v,i)=>`<div class="grp"><div class="row" style="margin:0 0 6px"><b>${esc(v.n)}</b><button class="x" data-dv="${i}" aria-label="Remove">×</button></div><div class="vg"><select data-v="${i}" data-f="t" aria-label="Type">${op(VT,v.t)}</select><select data-v="${i}" data-f="s" aria-label="Status">${op(VS,v.s)}</select><input data-v="${i}" data-f="l" placeholder="Location" value="${esc(v.l||'')}"><input type="number" min="0" data-v="${i}" data-f="c" placeholder="Capacity" value="${v.c||''}"><input type="number" min="0" data-v="${i}" data-f="p" placeholder="Cost (₱)" value="${v.p||''}"><input data-v="${i}" data-f="m" placeholder="Facebook / Notes" value="${esc(v.m||'')}"></div></div>`).join('');
+S.p.sort((a,b)=>a.tm.localeCompare(b.tm));
+$('pl').innerHTML=S.p.map((x,i)=>`<tr><td><input type="time" data-p="${i}" data-f="tm" value="${x.tm}" aria-label="Time"></td><td><input data-p="${i}" data-f="e" value="${esc(x.e)}" aria-label="Event"></td><td><input data-p="${i}" data-f="w" value="${esc(x.w||'')}" placeholder="Name" aria-label="Who"></td><td><button class="x" data-dp="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+tick()}
+
+$('nm').oninput=e=>{S.n=e.target.value;save()};
+$('dt').onchange=e=>{
+  let val = e.target.value;
+  if(val && val.includes('/')) {
+    const p = val.split('/');
+    if(p.length === 3) val = `${p[2]}-${p[0].padStart(2,'0')}-${p[1].padStart(2,'0')}`;
+  }
+  S.d = val;
+  save();
+  tick();
+};
+
+$('nav').onclick=e=>{
+  const t=e.target.dataset.t;
+  if(!t)return;
+  document.querySelectorAll('nav button,section').forEach(x=>x.classList.remove('on'));
+  e.target.classList.add('on');
+  $(t).classList.add('on');
+};
+
+document.addEventListener('change',e=>{const d=e.target.dataset;if(d.id){S.c[d.id]=e.target.checked}else if(d.g!=null){S.g[d.g].s=+e.target.value}else if(d.b!=null){S.b[d.b][d.f]=+e.target.value||0}else if(d.v!=null){S.v[d.v][d.f]=["c","p","s","t"].includes(d.f)?+e.target.value||0:e.target.value}else if(d.p!=null){S.p[d.p][d.f]=e.target.value}else return;save()});
+document.addEventListener('click',e=>{const d=e.target.dataset;
+if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=n
