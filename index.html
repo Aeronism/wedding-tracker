@@ -7,8 +7,6 @@
 :root{--ivory:#F2EBDD;--sage:#78947F;--em:#185844;--forest:#102F27;--gold:#B08A4F;
 --bg:#F2EBDD;--card:#102F27;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#102F27;--hdt:#F2EBDD;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#102F27;--card:#163a30;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#0c241d}}
-:root[data-theme="dark"]{--bg:#102F27;--card:#163a30;--text:#F2EBDD;--muted:#a9bcae;--line:#2a5546;--track:#0c241d;--hd:#0c241d}
 *{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
 body{margin:0;background:var(--bg);color:var(--text);font-family:Jost,system-ui,sans-serif;font-size:15px}
 .serif,h1,h2,h3{font-family:'Cormorant Garamond',Georgia,serif;font-weight:600}
@@ -33,7 +31,7 @@ h2{margin:0 0 10px;font-size:24px}h3{margin:0 0 8px;font-size:20px;color:var(--g
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}@media(max-width:620px){.grid{grid-template-columns:1fr}}
 label.it{display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);cursor:pointer}
 label.it:last-child{border:0}
-input[type=checkbox]{accent-color:var(--em);width:19px;height:19px;flex:none}
+input[type=checkbox]{accent-color:#185844;width:19px;height:19px;flex:none}
 .done{text-decoration:line-through;color:var(--muted)}
 input,select{font:inherit;color:var(--text);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:8px}
 input[type=date]{color-scheme:light dark}
@@ -115,8 +113,8 @@ const RAW={
 };
 
 const CL={};Object.keys(RAW).forEach((c,i)=>CL[c]=RAW[c].map((s,j)=>{const[t,n,u]=s.split('|'),b=u?u.split(';'):[];return{t,n,h:b.length>0,L:(b.length?b:[t]).map((x,k)=>({id:'c'+i+'_'+j+'_'+k,t:x}))}}));
-const OP={},HW={};
 const CN=Object.keys(CL),RS=["Pending","Confirmed","Declined"];
+
 let S = {
   n: 'John & Jocelyn',
   d: '2027-04-01',
@@ -154,16 +152,16 @@ let S = {
 const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 
 const save=()=>{
-  try {
-    db.set(S);
-  } catch(e) {
-    console.error("Firebase sync error:", e);
-  }
+  try { db.set(S); } catch(e) { console.error("Firebase sync error:", e); }
 };
 
+// RENDER IMMEDIATELY ON LOAD SO UI IS NEVER BLANK
+render();
+
+// BACKGROUND SYNC WITH FIREBASE
 db.on('value', (snapshot) => {
   const data = snapshot.val();
-  if (data) {
+  if (data && data.n) {
     S = data;
     S.c = S.c || {};
     S.x = S.x || [];
@@ -171,52 +169,71 @@ db.on('value', (snapshot) => {
     S.v = S.v || [];
     S.p = S.p || [];
     S.b = S.b || [];
-    $('nm').value = S.n || 'John & Jocelyn';
-    $('dt').value = S.d || '2027-04-01';
   } else {
     save();
   }
+  $('nm').value = S.n || 'John & Jocelyn';
+  $('dt').value = S.d || '2027-04-01';
   render();
+}, (error) => {
+  console.error("Firebase read failed, running offline mode:", error);
 });
 
-const pct=(a,b)=>b?Math.round(a/b*100):0,bar=(id,v)=>$(id).style.width=v+'%';
-function tasks(){const t=[];CN.forEach(c=>CL[c].forEach(g=>g.L.forEach(l=>t.push({id:l.id,c,t:l.t}))));S.x.forEach((x,k)=>t.push({id:'x'+k,c:x.c,t:x.t,k}));return t}
-function tick(){
-  let targetDate = S.d;
-  if(targetDate && targetDate.includes('/')) {
-    const parts = targetDate.split('/');
-    if(parts.length === 3) targetDate = `${parts[2]}-${parts[0].padStart(2,'0')}-${parts[1].padStart(2,'0')}`;
+function parseDate(dStr) {
+  if (!dStr) return null;
+  if (dStr.includes('-')) {
+    const p = dStr.split('-');
+    if (p.length === 3) return new Date(+p[0], +p[1] - 1, +p[2]);
   }
-  const el=targetDate?new Date(targetDate+'T00:00:00')-Date.now():NaN;
+  if (dStr.includes('/')) {
+    const p = dStr.split('/');
+    if (p.length === 3) return new Date(+p[2], +p[0] - 1, +p[1]);
+  }
+  return new Date(dStr);
+}
+
+const pct=(a,b)=>b?Math.round(a/b*100):0,bar=(id,v)=>{const el=$(id);if(el)el.style.width=v+'%';};
+
+function tasks(){const t=[];CN.forEach(c=>CL[c].forEach(g=>g.L.forEach(l=>t.push({id:l.id,c,t:l.t}))));S.x.forEach((x,k)=>t.push({id:'x'+k,c:x.c,t:x.t,k}));return t}
+
+function tick(){
+  const targetDateObj = parseDate(S.d);
+  const el = targetDateObj ? targetDateObj - Date.now() : NaN;
   if(isNaN(el)){$('msg').textContent='Set your date to begin';['cd','ch','cm','cs'].forEach(i=>$(i).textContent='–');return}
   const m=el<=0;$('msg').textContent=m?'Happily ever after':'Until we say “I do”';
-  const v=Math.max(el,0),p=n=>String(n).padStart(2,'0');
-  $('cd').textContent=Math.floor(v/864e5);$('ch').textContent=p(Math.floor(v/36e5)%24);$('cm').textContent=p(Math.floor(v/6e4)%60);$('cs').textContent=p(Math.floor(v/1e3)%60);
-  const tot=new Date(targetDate+'T00:00:00')-S.s,tp=tot>0?Math.min(100,Math.round((Date.now()-S.s)/tot*100)):100;$('tp').textContent=tp+'%';bar('tb',tp)
+  const v=Math.max(el,0),pad=n=>String(n).padStart(2,'0');
+  $('cd').textContent=Math.floor(v/864e5);$('ch').textContent=pad(Math.floor(v/36e5)%24);$('cm').textContent=pad(Math.floor(v/6e4)%60);$('cs').textContent=pad(Math.floor(v/1e3)%60);
+  const startObj = new Date(S.s);
+  const tot = targetDateObj ? targetDateObj - startObj : 0;
+  const tp = tot>0?Math.min(100,Math.round((Date.now()-S.s)/tot*100)):100;
+  $('tp').textContent=tp+'%';bar('tb',tp);
 }
-function render(){const T=tasks(),done=T.filter(t=>S.c[t.id]).length;
-$('op').textContent=pct(done,T.length)+'%';bar('ob',pct(done,T.length));
-$('cats').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;return `<div class="row"><span>${c}</span><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`}).join('');
-const item=(id,t,k)=>`<label class="it"><input type="checkbox" data-id="${id}" ${S.c[id]?'checked':''}><span class="${S.c[id]?'done':''}" style="flex:1">${esc(t)}</span>${k!=null?`<button class="x" data-dx="${k}" aria-label="Remove">×</button>`:''}</label>`;
-$('nx').innerHTML=T.filter(t=>!S.c[t.id]).slice(0,5).map(t=>`<div class="row"><span>${esc(t.t)}</span><span class="muted">${t.c}</span></div>`).join('')||'<p class="muted">Everything is checked off. Congratulations!</p>';
-$('cl').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;
-return `<div class="row" style="margin-top:18px"><h3 style="margin:0">${c}</h3><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`+CL[c].map(g=>{const n=g.L.filter(l=>S.c[l.id]).length;
-return `<div class="grp">${g.h?`<div class="row" style="margin:0 0 2px"><b>${esc(g.t)}</b><span class="muted">${n}/${g.L.length}</span></div>`:''}${g.n?`<p class="muted" style="margin:0 0 4px;font-size:13px">${esc(g.n)}</p>`:''}${HW[g.t]?`<button class="hw" data-hw="${esc(g.t)}">${OP[g.t]?'Hide steps':'How to'}</button>${OP[g.t]?`<ol class="steps">${HW[g.t].split(';').map(x=>`<li>${esc(x)}</li>`).join('')}</ol>`:''}`:''}${g.L.map(l=>item(l.id,l.t)).join('')}</div>`}).join('')+S.x.map((x,k)=>x.c==c?item('x'+k,x.t,k):'').join('')}).join('');
-$('xc').innerHTML=CN.map(c=>`<option>${c}</option>`).join('');
-const E=S.b.reduce((a,b)=>a+(+b.e||0),0),P=S.b.reduce((a,b)=>a+(+b.p||0),0);
-$('bp').textContent=pct(P,E)+'%';bar('bb',Math.min(100,pct(P,E)));$('bt').textContent=`Paid ₱${P.toLocaleString()} of ₱${E.toLocaleString()} · Remaining ₱${(E-P).toLocaleString()}`;
-$('bl').innerHTML=S.b.map((b,i)=>`<tr><td>${esc(b.n)}</td><td><input type="number" min="0" value="${b.e}" data-b="${i}" data-f="e" aria-label="Estimated"></td><td><input type="number" min="0" value="${b.p}" data-b="${i}" data-f="p" aria-label="Paid"></td><td><button class="x" data-db="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-const C=S.g.filter(g=>g.s==1).length;$('gp').textContent=pct(C,S.g.length)+'%';bar('gb',pct(C,S.g.length));
-$('gt').textContent=`Target about 50 · ${S.g.length} invited · ${S.g.filter(g=>g.m).length} contacted · ${C} confirmed · ${S.g.filter(g=>g.s==2).length} declined`;
-$('gl').innerHTML=S.g.map((g,i)=>`<tr><td>${esc(g.n)}</td><td><button class="x mc ${g.m?'on':''}" data-gm="${i}" aria-label="${g.m?'Contacted':'Not contacted yet'}" title="${g.m?'Contacted':'Not contacted yet'}">✉</button></td><td><select data-g="${i}">${RS.map((r,k)=>`<option value="${k}" ${g.s==k?'selected':''}>${r}</option>`).join('')}</select></td><td><button class="x" data-dg="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-const VT=["Ceremony","Reception","Both"],VS=["Considering","Visited","Booked","Passed"],op=(a,x)=>a.map((o,k)=>`<option value="${k}" ${x==k?'selected':''}>${o}</option>`).join('');
-$('vs').textContent=`${S.v.length} venues · ${S.v.filter(v=>v.s==2).length} booked`;
-$('vl').innerHTML=S.v.map((v,i)=>`<div class="grp"><div class="row" style="margin:0 0 6px"><b>${esc(v.n)}</b><button class="x" data-dv="${i}" aria-label="Remove">×</button></div><div class="vg"><select data-v="${i}" data-f="t" aria-label="Type">${op(VT,v.t)}</select><select data-v="${i}" data-f="s" aria-label="Status">${op(VS,v.s)}</select><input data-v="${i}" data-f="l" placeholder="Location" value="${esc(v.l||'')}"><input type="number" min="0" data-v="${i}" data-f="c" placeholder="Capacity" value="${v.c||''}"><input type="number" min="0" data-v="${i}" data-f="p" placeholder="Cost (₱)" value="${v.p||''}"><input data-v="${i}" data-f="m" placeholder="Facebook / Notes" value="${esc(v.m||'')}"></div></div>`).join('');
-S.p.sort((a,b)=>a.tm.localeCompare(b.tm));
-$('pl').innerHTML=S.p.map((x,i)=>`<tr><td><input type="time" data-p="${i}" data-f="tm" value="${x.tm}" aria-label="Time"></td><td><input data-p="${i}" data-f="e" value="${esc(x.e)}" aria-label="Event"></td><td><input data-p="${i}" data-f="w" value="${esc(x.w||'')}" placeholder="Name" aria-label="Who"></td><td><button class="x" data-dp="${i}" aria-label="Remove">×</button></td></tr>`).join('');
-tick()}
 
-$('nm').oninput=e=>{S.n=e.target.value;save()};
+function render(){
+  const T=tasks(),done=T.filter(t=>S.c[t.id]).length;
+  $('op').textContent=pct(done,T.length)+'%';bar('ob',pct(done,T.length));
+  $('cats').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;return `<div class="row"><span>${c}</span><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`}).join('');
+  const item=(id,t,k)=>`<label class="it"><input type="checkbox" data-id="${id}" ${S.c[id]?'checked':''}><span class="${S.c[id]?'done':''}" style="flex:1">${esc(t)}</span>${k!=null?`<button class="x" data-dx="${k}" aria-label="Remove">×</button>`:''}</label>`;
+  $('nx').innerHTML=T.filter(t=>!S.c[t.id]).slice(0,5).map(t=>`<div class="row"><span>${esc(t.t)}</span><span class="muted">${t.c}</span></div>`).join('')||'<p class="muted">Everything is checked off. Congratulations!</p>';
+  $('cl').innerHTML=CN.map(c=>{const a=T.filter(t=>t.c==c),d=a.filter(t=>S.c[t.id]).length;
+  return `<div class="row" style="margin-top:18px"><h3 style="margin:0">${c}</h3><span class="muted">${d}/${a.length}</span></div><div class="bar"><i style="width:${pct(d,a.length)}%"></i></div>`+CL[c].map(g=>{const n=g.L.filter(l=>S.c[l.id]).length;
+  return `<div class="grp">${g.h?`<div class="row" style="margin:0 0 2px"><b>${esc(g.t)}</b><span class="muted">${n}/${g.L.length}</span></div>`:''}${g.n?`<p class="muted" style="margin:0 0 4px;font-size:13px">${esc(g.n)}</p>`:''}${g.L.map(l=>item(l.id,l.t)).join('')}</div>`}).join('')+S.x.map((x,k)=>x.c==c?item('x'+k,x.t,k):'').join('')}).join('');
+  $('xc').innerHTML=CN.map(c=>`<option>${c}</option>`).join('');
+  const E=S.b.reduce((a,b)=>a+(+b.e||0),0),P=S.b.reduce((a,b)=>a+(+b.p||0),0);
+  $('bp').textContent=pct(P,E)+'%';bar('bb',Math.min(100,pct(P,E)));$('bt').textContent=`Paid ₱${P.toLocaleString()} of ₱${E.toLocaleString()} · Remaining ₱${(E-P).toLocaleString()}`;
+  $('bl').innerHTML=S.b.map((b,i)=>`<tr><td>${esc(b.n)}</td><td><input type="number" min="0" value="${b.e}" data-b="${i}" data-f="e" aria-label="Estimated"></td><td><input type="number" min="0" value="${b.p}" data-b="${i}" data-f="p" aria-label="Paid"></td><td><button class="x" data-db="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+  const C=S.g.filter(g=>g.s==1).length;$('gp').textContent=pct(C,S.g.length)+'%';bar('gb',pct(C,S.g.length));
+  $('gt').textContent=`Target about 50 · ${S.g.length} invited · ${S.g.filter(g=>g.m).length} contacted · ${C} confirmed · ${S.g.filter(g=>g.s==2).length} declined`;
+  $('gl').innerHTML=S.g.map((g,i)=>`<tr><td>${esc(g.n)}</td><td><button class="x mc ${g.m?'on':''}" data-gm="${i}" aria-label="${g.m?'Contacted':'Not contacted yet'}" title="${g.m?'Contacted':'Not contacted yet'}">✉</button></td><td><select data-g="${i}">${RS.map((r,k)=>`<option value="${k}" ${g.s==k?'selected':''}>${r}</option>`).join('')}</select></td><td><button class="x" data-dg="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+  const VT=["Ceremony","Reception","Both"],VS=["Considering","Visited","Booked","Passed"],op=(a,x)=>a.map((o,k)=>`<option value="${k}" ${x==k?'selected':''}>${o}</option>`).join('');
+  $('vs').textContent=`${S.v.length} venues · ${S.v.filter(v=>v.s==2).length} booked`;
+  $('vl').innerHTML=S.v.map((v,i)=>`<div class="grp"><div class="row" style="margin:0 0 6px"><b>${esc(v.n)}</b><button class="x" data-dv="${i}" aria-label="Remove">×</button></div><div class="vg"><select data-v="${i}" data-f="t" aria-label="Type">${op(VT,v.t)}</select><select data-v="${i}" data-f="s" aria-label="Status">${op(VS,v.s)}</select><input data-v="${i}" data-f="l" placeholder="Location" value="${esc(v.l||'')}"><input type="number" min="0" data-v="${i}" data-f="c" placeholder="Capacity" value="${v.c||''}"><input type="number" min="0" data-v="${i}" data-f="p" placeholder="Cost (₱)" value="${v.p||''}"><input data-v="${i}" data-f="m" placeholder="Facebook / Notes" value="${esc(v.m||'')}"></div></div>`).join('');
+  S.p.sort((a,b)=>a.tm.localeCompare(b.tm));
+  $('pl').innerHTML=S.p.map((x,i)=>`<tr><td><input type="time" data-p="${i}" data-f="tm" value="${x.tm}" aria-label="Time"></td><td><input data-p="${i}" data-f="e" value="${esc(x.e)}" aria-label="Event"></td><td><input data-p="${i}" data-f="w" value="${esc(x.w||'')}" placeholder="Name" aria-label="Who"></td><td><button class="x" data-dp="${i}" aria-label="Remove">×</button></td></tr>`).join('');
+  tick();
+}
+
+$('nm').oninput=e=>{S.n=e.target.value;save();};
 $('dt').onchange=e=>{
   let val = e.target.value;
   if(val && val.includes('/')) {
@@ -238,4 +255,4 @@ $('nav').onclick=e=>{
 
 document.addEventListener('change',e=>{const d=e.target.dataset;if(d.id){S.c[d.id]=e.target.checked}else if(d.g!=null){S.g[d.g].s=+e.target.value}else if(d.b!=null){S.b[d.b][d.f]=+e.target.value||0}else if(d.v!=null){S.v[d.v][d.f]=["c","p","s","t"].includes(d.f)?+e.target.value||0:e.target.value}else if(d.p!=null){S.p[d.p][d.f]=e.target.value}else return;save()});
 document.addEventListener('click',e=>{const d=e.target.dataset;
-if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=null)S.b.splice(+d.db,1);
+if(d.dx!=null){e.preventDefault();S.x.splice(+d.dx,1);Object.keys(S.c).forEach(k=>{if(k[0]=='x')delete S.c[k]})}else if(d.db!=null)S.b.splice(+d.db,1);else if(d.dv!=null)S.v.splice(+d.dv,1);else if(d.dp!=null)S.
