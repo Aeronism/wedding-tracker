@@ -72,12 +72,10 @@ td input{width:100%;min-width:70px}
 <div class="add"><input type="time" id="pt" style="flex:0 0 auto;min-width:0"><input id="pe" placeholder="New item"><button class="btn" id="pa">Add</button></div></div></section>
 </main>
 
-<!-- Firebase SDKs -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
 
-<script>
-// --- YOUR CONFIG & DATABASE URL ---
 const firebaseConfig = {
   apiKey: "AIzaSyDuGLZC0hLJcAsawp6dIZqK8AAbiwNxTEg",
   authDomain: "wedding-planning-tracker.firebaseapp.com",
@@ -89,9 +87,9 @@ const firebaseConfig = {
   measurementId: "G-31XMSCTGFQ"
 };
 
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-const db = firebase.database().ref('weddingTracker');
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const trackerRef = ref(db, 'weddingTracker');
 
 const RAW={
 "Start now (5 months out)":[
@@ -151,4 +149,4 @@ const OP={},HW={
 "Book hair and makeup":"Look at portfolios and ask about travel fees;Book a trial a few weeks before;Confirm the arrival time on the wedding day;Pay the deposit",
 "Plan the honeymoon":"Decide how long you can be away and your budget;Keep dates flexible around the baby due in June;Compare travel and stay options;Book refundable options when possible",
 "Check extra requirements that may apply":"Visit or call the registrar and ask for the complete list for your situation;Ask whether parental consent or advice is needed for your ages;Ask which seminar certificate is required;Write down the fees and processing times",
-"Apply for the marriage license":"Both of you go to the registrar together with your documents;Pay the fees;Wait for the posting period (usually 10 days) before it 
+"Apply for the marriage license":"Both of you go to the registrar together with your documents;Pay the fees;Wait for the posting period (usually 10 days) before it is released;Collect it 
